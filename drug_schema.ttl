@@ -1,0 +1,233 @@
+# =============================================================================
+# Drug Knowledge Graph Schema
+# Aligned with BioLink Model
+# =============================================================================
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix biolink:  <https://w3id.org/biolink/vocab/> .
+@prefix ex:       <http://example.org/drugkg/> .
+@prefix drug:     <https://go.drugbank.com/drugs/> .
+@prefix protein:  <https://www.uniprot.org/uniprotkb/> .
+@prefix gene:     <https://mygene.info/v3/gene/> .
+@prefix pathway:  <https://smpdb.ca/view/> .
+@prefix chemclass: <http://example.org/drugkg/chemclass/> .
+
+# -----------------------------------------------------------------------------
+# CLASSES — drug_core
+# -----------------------------------------------------------------------------
+
+ex:Drug a rdfs:Class ;
+    rdfs:subClassOf biolink:Drug ;
+    rdfs:label "Drug" ;
+    rdfs:comment "A drug entity from DrugBank." .
+
+ex:DrugInteraction a rdfs:Class ;
+    rdfs:subClassOf biolink:Association ;
+    rdfs:label "Drug Interaction" ;
+    rdfs:comment "An interaction between two drugs." .
+
+# -----------------------------------------------------------------------------
+# CLASSES — drug_mechanisms
+# -----------------------------------------------------------------------------
+
+ex:Protein a rdfs:Class ;
+    rdfs:subClassOf biolink:Protein ;
+    rdfs:label "Protein" ;
+    rdfs:comment "A protein entity." .
+
+ex:Gene a rdfs:Class ;
+    rdfs:subClassOf biolink:Gene ;
+    rdfs:label "Gene" ;
+    rdfs:comment "A gene that encodes a protein." .
+
+ex:Enzyme a rdfs:Class ;
+    rdfs:subClassOf biolink:Protein ;
+    rdfs:label "Enzyme" ;
+    rdfs:comment "A protein acting as an enzyme for a drug." .
+
+# -----------------------------------------------------------------------------
+# CLASSES — drug_biological_context
+# -----------------------------------------------------------------------------
+
+ex:Pathway a rdfs:Class ;
+    rdfs:subClassOf biolink:Pathway ;
+    rdfs:label "Pathway" ;
+    rdfs:comment "A biological pathway." .
+
+# -----------------------------------------------------------------------------
+# CLASSES — drug_network_context
+# -----------------------------------------------------------------------------
+
+ex:ChemicalClass a rdfs:Class ;
+    rdfs:subClassOf biolink:ChemicalEntity ;
+    rdfs:label "Chemical Class" ;
+    rdfs:comment "A chemical classification node." .
+
+# -----------------------------------------------------------------------------
+# PROPERTIES — drug_core
+# -----------------------------------------------------------------------------
+
+ex:hasID a rdf:Property ;
+    rdfs:subPropertyOf biolink:id ;
+    rdfs:label "has DrugBank ID" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasName a rdf:Property ;
+    rdfs:subPropertyOf biolink:name ;
+    rdfs:label "has name" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasDescription a rdf:Property ;
+    rdfs:subPropertyOf biolink:description ;
+    rdfs:label "has description" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasIndication a rdf:Property ;
+    rdfs:label "has indication" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasMechanismOfAction a rdf:Property ;
+    rdfs:label "has mechanism of action" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasGroup a rdf:Property ;
+    rdfs:label "has group" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasSynonym a rdf:Property ;
+    rdfs:subPropertyOf biolink:synonym ;
+    rdfs:label "has synonym" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasState a rdf:Property ;
+    rdfs:label "has state" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasMolecularWeight a rdf:Property ;
+    rdfs:subPropertyOf biolink:has_attribute ;
+    rdfs:label "has molecular weight" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:float .
+
+ex:interactsWith a rdf:Property ;
+    rdfs:subPropertyOf biolink:interacts_with ;
+    rdfs:label "interacts with" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range ex:Drug .
+
+# -----------------------------------------------------------------------------
+# PROPERTIES — drug_mechanisms
+# -----------------------------------------------------------------------------
+
+ex:hasTarget a rdf:Property ;
+    rdfs:subPropertyOf biolink:interacts_with ;
+    rdfs:label "has target" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range ex:Protein .
+
+ex:hasEnzyme a rdf:Property ;
+    rdfs:label "has enzyme" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range ex:Enzyme .
+
+ex:hasAction a rdf:Property ;
+    rdfs:label "has action" ;
+    rdfs:domain ex:Protein ;
+    rdfs:range xsd:string .
+
+ex:hasUniProtID a rdf:Property ;
+    rdfs:label "has UniProt ID" ;
+    rdfs:domain ex:Protein ;
+    rdfs:range xsd:string .
+
+ex:encodedBy a rdf:Property ;
+    rdfs:subPropertyOf biolink:gene_product_of ;
+    rdfs:label "encoded by" ;
+    rdfs:domain ex:Protein ;
+    rdfs:range ex:Gene .
+
+ex:hasGeneDescription a rdf:Property ;
+    rdfs:label "has gene description" ;
+    rdfs:domain ex:Gene ;
+    rdfs:range xsd:string .
+
+# -----------------------------------------------------------------------------
+# PROPERTIES — drug_biological_context
+# -----------------------------------------------------------------------------
+
+ex:hasPathway a rdf:Property ;
+    rdfs:subPropertyOf biolink:participates_in ;
+    rdfs:label "has pathway" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range ex:Pathway .
+
+ex:pathwayCategory a rdf:Property ;
+    rdfs:label "pathway category" ;
+    rdfs:domain ex:Pathway ;
+    rdfs:range xsd:string .
+
+ex:pathwayName a rdf:Property ;
+    rdfs:subPropertyOf biolink:name ;
+    rdfs:label "pathway name" ;
+    rdfs:domain ex:Pathway ;
+    rdfs:range xsd:string .
+
+ex:pathwayHasEnzyme a rdf:Property ;
+    rdfs:label "pathway has enzyme" ;
+    rdfs:domain ex:Pathway ;
+    rdfs:range ex:Enzyme .
+
+ex:pathwayHasDrug a rdf:Property ;
+    rdfs:label "pathway has drug" ;
+    rdfs:domain ex:Pathway ;
+    rdfs:range ex:Drug .
+
+# -----------------------------------------------------------------------------
+# PROPERTIES — drug_network_context
+# -----------------------------------------------------------------------------
+
+ex:interactsWithProtein a rdf:Property ;
+    rdfs:subPropertyOf biolink:interacts_with ;
+    rdfs:label "protein interacts with" ;
+    rdfs:domain ex:Protein ;
+    rdfs:range ex:Protein .
+
+ex:hasKingdom a rdf:Property ;
+    rdfs:label "has kingdom" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasSuperclass a rdf:Property ;
+    rdfs:label "has superclass" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasClass a rdf:Property ;
+    rdfs:label "has class" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasSubclass a rdf:Property ;
+    rdfs:label "has subclass" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:hasDirectParent a rdf:Property ;
+    rdfs:label "has direct parent" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
+
+ex:targetAction a rdf:Property ;
+    rdfs:label "target action" ;
+    rdfs:domain ex:Drug ;
+    rdfs:range xsd:string .
